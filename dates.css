@@ -1,0 +1,54 @@
+body {
+  font-family: monospace;
+}
+
+table.group>tr>td {
+  vertical-align: top;
+  padding-bottom: 2em;
+}
+
+table.year {
+  border: solid 1px #000;
+  border-collapse: collapse;
+}
+
+table.year>tr>td {
+  vertical-align: top;
+  border: solid 1px #000;
+  padding: 0.25em;
+}
+
+table.year>tr>th {
+  font-size: 24pt;
+}
+
+.month-name {
+  text-align: center;
+  font-weight: bold;
+  font-size: 12pt;
+}
+
+table.month {
+  width: 100%;
+}
+
+table.month th {
+  color: red;
+  text-align: center;
+}
+
+table.month td:first-child,
+table.month td:last-child {
+  color: blue;
+  font-weight: bold;
+}
+
+table.month td {
+  text-align: right;
+}
+
+@media print {
+  table.group>tr>td {
+    page-break-inside: avoid;
+  }
+}
