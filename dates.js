@@ -1,27 +1,23 @@
-var namesOfMonth = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
 var buildMonth = function(year, month) {
-  var d = new Date(year, month, 1);
-  var $table = $('<table/>', { 'class': 'month' });
+  let d = new Date(year, month, 1);
+  let $table = $('<table/>', { 'class': 'month' });
 
-  var $tr;
-  var $td;
+  let $tr;
+  let $td;
 
   $tr = $('<tr/>');
   $table.append($tr);
 
-  for (var i = 0; i < 7; i++) {
-    var $th = $('<th/>').text('SuMoTuWeThFrSa'.substring(i * 2, i * 2 + 2));
+  for (let i = 0; i < 7; i++) {
+    let $th = $('<th/>').text('SuMoTuWeThFrSa'.substring(i * 2, i * 2 + 2));
     $tr.append($th);
   }
 
   $tr = $('<tr/>');
   $table.append($tr);
 
-  var dow = d.getDay();
-  for (var i = 0; i < dow; i++) {
+  let dow = d.getDay();
+  for (let i = 0; i < dow; i++) {
     $td = $('<td/>');
     $tr.append($td);
   }
@@ -40,7 +36,7 @@ var buildMonth = function(year, month) {
   }
 
   if (dow != 0) {
-    for (var i = dow; i < 7; i++) {
+    for (let i = dow; i < 7; i++) {
       $td = $('<td/>');
       $tr.append($td);
     }
@@ -50,23 +46,25 @@ var buildMonth = function(year, month) {
 };
 
 var buildYear = function(year, monthsInRow) {
-  var $table = $('<table/>', { 'class': 'year' });
+  let monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December" ];
+  let $table = $('<table/>', { 'class': 'year' });
 
-  var $tr = $('<tr/>');
+  let $tr = $('<tr/>');
   $table.append($tr);
 
-  var $th = $('<th/>', { 'colspan': monthsInRow }).text(year);
+  let $th = $('<th/>', { 'colspan': monthsInRow }).text(year);
   $tr.append($th);
 
-  for (var month = 0; month < 12; month++) {
+  for (let month = 0; month < 12; month++) {
     if (month % monthsInRow == 0) {
       $tr = $('<tr/>');
       $table.append($tr);
     }
 
-    var $td = $('<td/>');
+    let $td = $('<td/>');
     $tr.append($td);
-    $td.append($('<div/>', { 'class': 'month-name' }).text(namesOfMonth[month]));
+    $td.append($('<div/>', { 'class': 'month-name' }).text(monthNames[month]));
     $td.append(buildMonth(year, month));
   }
 
@@ -74,16 +72,16 @@ var buildYear = function(year, monthsInRow) {
 };
 
 var buildGrid = function(fromYear, toYear, yearsInRow) {
-  var $table = $('<table/>', { 'class': 'group' });
+  let $table = $('<table/>', { 'class': 'group' });
 
-  var $tr;
-  for (var year = fromYear; year <= toYear; year++) {
+  let $tr;
+  for (let year = fromYear; year <= toYear; year++) {
     if ((year - fromYear) % yearsInRow == 0) {
       $tr = $('<tr/>');
       $table.append($tr);
     }
 
-    var $td = $('<td/>');
+    let $td = $('<td/>');
     $tr.append($td);
     $td.append(buildYear(year, 3));
   }
@@ -91,7 +89,19 @@ var buildGrid = function(fromYear, toYear, yearsInRow) {
   return $table;
 };
 
+var getArgMap = function(url) {
+  url = url || window.location.href;
+  let map = [];
+  $.each(url.slice(url.indexOf('?') + 1).split('&'), function() {
+    let hash = this.split('=');
+    map[hash[0]] = hash[1];
+  });
+
+  return map;
+};
+
 $(document).ready(function() {
-  var $cal = buildGrid(1999,2018,3); //buildYear(2018, 3);
+  let map = getArgMap();
+  let $cal = buildGrid(map['start'] || 1999, map['end'] || 2018, map['rows'] || 100000);
   $('body').append($cal);
 });
